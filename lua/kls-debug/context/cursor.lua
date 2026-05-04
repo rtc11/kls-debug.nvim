@@ -37,7 +37,8 @@ function M.collect(a, b, c, d)
 	col = col or vim.api.nvim_win_get_cursor(0)[2]
 	local line_text = vim.api.nvim_buf_get_lines(bufnr, row - 1, row, false)[1] or ""
 	local surrounding = opts.surrounding_lines or 10
-	local before = vim.api.nvim_buf_get_lines(bufnr, math.max(0, row - surrounding - 1), row - 1, false)
+	local before =
+		vim.api.nvim_buf_get_lines(bufnr, math.max(0, row - surrounding - 1), row - 1, false)
 	local after = vim.api.nvim_buf_get_lines(bufnr, row, row + surrounding, false)
 
 	return {

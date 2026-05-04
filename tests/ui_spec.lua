@@ -50,11 +50,15 @@ describe("kls-debug.ui", function()
 
 	it("closes window from q keymap", function()
 		local view = ui.create_output({ output = "float" })
-		local before = #vim.api.nvim_list_wins()
-
-		vim.api.nvim_input("q")
+		vim.schedule(function()
+			vim.api.nvim_feedkeys(
+				vim.api.nvim_replace_termcodes("q", true, false, true),
+				"mx",
+				false
+			)
+		end)
 		vim.wait(1000, function()
-			return #vim.api.nvim_list_wins() < before
+			return not vim.api.nvim_win_is_valid(view.win)
 		end)
 
 		check(not vim.api.nvim_win_is_valid(view.win), "window still valid")

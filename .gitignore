@@ -5,3 +5,4 @@ lua_modules/
 .luacov
 luacov.stats.out
 luacov.report.out
+.sisyphus/

@@ -1,8 +1,0 @@
-split smoke test
-{
-  "name": "/Users/Robin.Tordly/code/c3/kls-debug.nvim/[kls-debug-output]",
-  "ft": "markdown",
-  "bt": "nofile",
-  "mod": true,
-  "ro": false
-}

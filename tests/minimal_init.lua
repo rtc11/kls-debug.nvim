@@ -1,0 +1,1 @@
+-- Minimal init for plenary busted specs.

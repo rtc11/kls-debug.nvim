@@ -1,6 +1,0 @@
-float smoke test
-{
-  "border": ["╭", "─", "╮", "│", "╯", "─", "╰", "│"],
-  "rel": "editor",
-  "bt": "nofile"
-}

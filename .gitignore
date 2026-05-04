@@ -1,0 +1,7 @@
+*.luac
+.luarc.json
+lua_modules/
+.DS_Store
+.luacov
+luacov.stats.out
+luacov.report.out

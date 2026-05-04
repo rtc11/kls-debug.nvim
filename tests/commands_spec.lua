@@ -99,20 +99,17 @@ describe("kls-debug commands", function()
 			fargs = { "why" },
 		})
 
-		assert.are.same(
+		assert.are.same({
+			"why",
+			"headless",
 			{
-				"why",
-				"headless",
-				{
-					bufnr = 0,
-					line1 = 5,
-					line2 = 10,
-					visual = true,
-					visual_range = { 5, 10 },
-				},
+				bufnr = 0,
+				line1 = 5,
+				line2 = 10,
+				visual = true,
+				visual_range = { 5, 10 },
 			},
-			captured.ask
-		)
+		}, captured.ask)
 	end)
 
 	it("concats nargs star question words", function()
@@ -124,19 +121,16 @@ describe("kls-debug commands", function()
 			fargs = { "one", "two", "three" },
 		})
 
-		assert.are.same(
+		assert.are.same({
+			"one two three",
+			"terminal",
 			{
-				"one two three",
-				"terminal",
-				{
-					bufnr = 0,
-					line1 = 1,
-					line2 = 1,
-					visual = false,
-					visual_range = nil,
-				},
+				bufnr = 0,
+				line1 = 1,
+				line2 = 1,
+				visual = false,
+				visual_range = nil,
 			},
-			captured.ask
-		)
+		}, captured.ask)
 	end)
 end)

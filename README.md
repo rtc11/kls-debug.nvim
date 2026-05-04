@@ -61,7 +61,7 @@ Default options:
   keymaps = {
     visual = "<leader>kd",
     normal_diag = "<leader>kd",
-    enabled = false,
+    enabled = true,
   },
 }
 ```

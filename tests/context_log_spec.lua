@@ -31,24 +31,79 @@ describe("kls-debug.context.log", function()
 		end)
 
 		assert.is_true(wait_for(done))
-		assert.are.equal("log", got.kind)
+		assert.are.equal("kls_log", got.kind)
 		assert.is_true(got.ok)
 		assert.is_string(got.data)
 		assert.is_nil(got.data:find("line 001", 1, true))
 		assert.is_truthy(got.data:find("line 260", 1, true))
 	end)
 
-	it("soft skips when not configured", function()
+	it("auto-detects workspace kls.log", function()
+		local dir = vim.fn.tempname()
+		vim.fn.mkdir(dir, "p")
+		local path = dir .. "/kls.log"
+		vim.fn.writefile({ "workspace log" }, path)
+
 		local done = { value = false }
 		local got
-		log.collect({}, function(result)
+		log.collect({ workspace_root = dir }, function(result)
 			got = result
 			done.value = true
 		end)
 
 		assert.is_true(wait_for(done))
-		assert.are.equal("log", got.kind)
+		assert.are.equal("kls_log", got.kind)
+		assert.is_true(got.ok)
+		assert.are.equal("workspace log", got.data)
+	end)
+
+	it("auto-detects /tmp/kls.log fallback", function()
+		local path = "/tmp/kls.log"
+		local had_existing = vim.fn.filereadable(path) == 1
+		local original = had_existing and vim.fn.readfile(path) or nil
+		vim.fn.writefile({ "tmp fallback log" }, path)
+
+		local done = { value = false }
+		local got
+		log.collect({ workspace_root = vim.fn.tempname() }, function(result)
+			got = result
+			done.value = true
+		end)
+
+		assert.is_true(wait_for(done))
+		assert.are.equal("kls_log", got.kind)
+		assert.is_true(got.ok)
+		assert.are.equal("tmp fallback log", got.data)
+
+		if had_existing then
+			vim.fn.writefile(original, path)
+		else
+			vim.fn.delete(path)
+		end
+	end)
+
+	it("soft skips when no log file found", function()
+		local path = "/tmp/kls.log"
+		local had_existing = vim.fn.filereadable(path) == 1
+		local original = had_existing and vim.fn.readfile(path) or nil
+		if had_existing then
+			vim.fn.delete(path)
+		end
+
+		local done = { value = false }
+		local got
+		log.collect({ workspace_root = vim.fn.tempname() }, function(result)
+			got = result
+			done.value = true
+		end)
+
+		assert.is_true(wait_for(done))
+		assert.are.equal("kls_log", got.kind)
 		assert.is_false(got.ok)
-		assert.are.equal("not configured", got.reason)
+		assert.are.equal("no log file found", got.reason)
+
+		if had_existing then
+			vim.fn.writefile(original, path)
+		end
 	end)
 end)

@@ -1,83 +1,49 @@
 local M = {}
 
-local uv = vim.uv or vim.loop
-
-local MAX_BYTES = 100 * 1024
-local CHUNK_SIZE = 8192
-local READ_ALL_CUTOFF = 1024 * 1024
-
-local function split_lines(text)
-	local lines = {}
-	if type(text) ~= "string" or text == "" then
-		return lines
-	end
-	for line in (text .. "\n"):gmatch("(.-)\n") do
-		table.insert(lines, line)
-	end
-	return lines
-end
-
-local function tail_lines_from_text(text, max_lines)
-	local lines = split_lines(text)
-	if #lines <= max_lines then
-		return text
-	end
-	local start = #lines - max_lines + 1
-	local out = {}
-	for i = start, #lines do
-		table.insert(out, lines[i])
-	end
-	return table.concat(out, "\n")
-end
-
-local function read_tail(path, max_lines)
-	local fd = uv.fs_open(path, "r", 438)
-	if not fd then
-		return nil, "not found"
+local function detect_log_path(opts)
+	if type(opts) ~= "table" then
+		return nil
 	end
 
-	local stat = uv.fs_fstat(fd)
-	if not stat then
-		uv.fs_close(fd)
-		return nil, "not found"
+	if type(opts.kls_log_path) == "string" and opts.kls_log_path ~= "" then
+		return opts.kls_log_path
 	end
 
-	local size = stat.size or 0
-	local cap = math.min(MAX_BYTES, size)
-	if size <= READ_ALL_CUTOFF then
-		local data = uv.fs_read(fd, cap, 0) or ""
-		uv.fs_close(fd)
-		return tail_lines_from_text(data, max_lines), nil
+	local workspace_root = opts.workspace_root
+	if type(workspace_root) ~= "string" or workspace_root == "" then
+		workspace_root = vim.fn.getcwd()
 	end
 
-	local chunks = {}
-	local remaining = cap
-	local offset = size
-	local total = 0
-	while remaining > 0 and offset > 0 do
-		local read_len = math.min(CHUNK_SIZE, remaining, offset)
-		offset = offset - read_len
-		local chunk = uv.fs_read(fd, read_len, offset) or ""
-		table.insert(chunks, 1, chunk)
-		total = total + #chunk
-		remaining = remaining - #chunk
-		if total >= cap then
-			break
+	local candidates = {
+		workspace_root .. "/kls.log",
+		"/tmp/kls.log",
+	}
+
+	for _, path in ipairs(candidates) do
+		if vim.fn.filereadable(path) == 1 then
+			return path
 		end
 	end
 
-	uv.fs_close(fd)
-	local text = table.concat(chunks, "")
-	return tail_lines_from_text(text, max_lines), nil
+	return nil
+end
+
+local function read_tail(path, max_lines)
+	if vim.fn.filereadable(path) ~= 1 then
+		return nil, "not found"
+	end
+
+	local lines = vim.fn.readfile(path, "", -max_lines)
+	return table.concat(lines, "\n"), nil
 end
 
 function M.collect(opts, callback)
-	local result = { kind = "log", ok = false }
+	local result = { kind = "kls_log", ok = false }
 	local cb = type(callback) == "function" and callback or function() end
 	local ok, err = pcall(function()
-		local path = type(opts) == "table" and opts.kls_log_path or nil
+		local path = detect_log_path(opts)
 		if type(path) ~= "string" or path == "" then
-			result.reason = "not configured"
+			result.reason = "no log file found"
 			cb(result)
 			return
 		end
@@ -96,7 +62,7 @@ function M.collect(opts, callback)
 	end)
 
 	if not ok then
-		cb({ kind = "log", ok = false, reason = tostring(err) })
+		cb({ kind = "kls_log", ok = false, reason = tostring(err) })
 	end
 end
 

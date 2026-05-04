@@ -124,7 +124,7 @@ describe("kls-debug.orchestrator", function()
 			["kls-debug.context.log"] = {
 				collect = function(_, callback)
 					vim.schedule(function()
-						callback({ kind = "log", ok = false, reason = "not configured" })
+						callback({ kind = "kls_log", ok = false, reason = "no log file found" })
 					end)
 				end,
 			},
@@ -193,7 +193,7 @@ describe("kls-debug.orchestrator", function()
 			["kls-debug.context.log"] = {
 				collect = function(_, callback)
 					vim.schedule(function()
-						callback({ kind = "log", ok = false, reason = "not configured" })
+						callback({ kind = "kls_log", ok = false, reason = "no log file found" })
 					end)
 				end,
 			},
@@ -275,7 +275,7 @@ describe("kls-debug.orchestrator", function()
 			["kls-debug.context.log"] = {
 				collect = function(_, callback)
 					vim.schedule(function()
-						callback({ kind = "log", ok = false, reason = "not configured" })
+						callback({ kind = "kls_log", ok = false, reason = "no log file found" })
 					end)
 				end,
 			},
@@ -462,7 +462,7 @@ describe("kls-debug.orchestrator", function()
 			["kls-debug.context.log"] = {
 				collect = function(_, callback)
 					vim.schedule(function()
-						callback({ kind = "log", ok = false, reason = "not configured" })
+						callback({ kind = "kls_log", ok = false, reason = "no log file found" })
 					end)
 				end,
 			},

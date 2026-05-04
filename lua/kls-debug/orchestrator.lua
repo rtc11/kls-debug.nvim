@@ -204,10 +204,13 @@ function M.ask(question, mode, trigger_ctx)
 		end
 	)
 
-	log_ctx.collect(cfg, function(result)
-		bundle.log = result
-		on_async_done()
-	end)
+	log_ctx.collect(
+		vim.tbl_extend("force", cfg, { workspace_root = workspace_root }),
+		function(result)
+			bundle.log = result
+			on_async_done()
+		end
+	)
 end
 
 function M.cancel()

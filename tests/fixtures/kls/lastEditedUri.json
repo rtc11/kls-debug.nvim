@@ -1,0 +1,7 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "uri": "file:///WORKSPACE/src/Main.kt"
+  }
+}

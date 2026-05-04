@@ -1,0 +1,9 @@
+{
+  "jsonrpc": "2.0",
+  "id": 3,
+  "result": {
+    "uri": "file:///WORKSPACE/src/Main.kt",
+    "line": 12,
+    "character": 4
+  }
+}

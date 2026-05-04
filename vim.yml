@@ -1,13 +1,7 @@
+---
 base: lua51
-lua_versions:
-  - luajit
-
 globals:
   vim:
-    any: true
-  jit:
-    any: true
-  assert:
     any: true
   describe:
     any: true
@@ -17,7 +11,5 @@ globals:
     any: true
   after_each:
     any: true
-  pending:
-    any: true
-  package:
+  assert:
     any: true

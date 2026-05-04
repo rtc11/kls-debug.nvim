@@ -1,0 +1,3 @@
+{"type":"step_start","timestamp":1,"sessionID":"sess_placeholder","part":{"id":"part1","messageID":"msg1","sessionID":"sess_placeholder","snapshot":"snap1","type":"step-start"}}
+{"type":"error","timestamp":2,"sessionID":"sess_placeholder","part":{"id":"part2","messageID":"msg1","sessionID":"sess_placeholder","type":"error","message":"tool failed","code":"TOOL_ERROR"}}
+{"type":"step_finish","timestamp":3,"sessionID":"sess_placeholder","part":{"id":"part3","reason":"error","snapshot":"snap1","messageID":"msg1","sessionID":"sess_placeholder","type":"step-finish","tokens":{"total":3,"input":1,"output":0,"reasoning":0,"cache":{"write":0,"read":0}},"cost":0}}

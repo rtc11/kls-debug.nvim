@@ -1,0 +1,4 @@
+{"type":"step_start","timestamp":1,"sessionID":"sess_placeholder","part":{"id":"part1","messageID":"msg1","sessionID":"sess_placeholder","snapshot":"snap1","type":"step-start"}}
+{"type":"thinking","timestamp":2,"sessionID":"sess_placeholder","part":{"id":"part2","messageID":"msg1","sessionID":"sess_placeholder","type":"thinking","text":"Plan response"}}
+{"type":"text","timestamp":3,"sessionID":"sess_placeholder","part":{"id":"part3","messageID":"msg1","sessionID":"sess_placeholder","type":"text","text":"Done.","time":{"start":2,"end":3}}}
+{"type":"step_finish","timestamp":4,"sessionID":"sess_placeholder","part":{"id":"part4","reason":"stop","snapshot":"snap1","messageID":"msg1","sessionID":"sess_placeholder","type":"step-finish","tokens":{"total":6,"input":2,"output":1,"reasoning":1,"cache":{"write":0,"read":0}},"cost":0}}

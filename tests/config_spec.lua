@@ -28,7 +28,7 @@ describe("kls-debug.config", function()
 			keymaps = {
 				visual = "<leader>kd",
 				normal_diag = "<leader>kd",
-				enabled = true,
+				enabled = false,
 			},
 		}, config.defaults)
 	end)

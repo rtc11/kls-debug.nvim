@@ -25,7 +25,7 @@ M.defaults = {
 	keymaps = {
 		visual = "<leader>kd",
 		normal_diag = "<leader>kd",
-		enabled = true,
+		enabled = false,
 	},
 }
 

@@ -1,0 +1,55 @@
+name: test
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    name: test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        nvim_version: [v0.9.5, v0.10.2, nightly]
+        os: [ubuntu-latest, macos-latest]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Neovim
+        uses: rhysd/action-setup-vim@v1
+        with:
+          neovim: true
+          version: ${{ matrix.nvim_version }}
+
+      - name: Install Stylua
+        uses: JohnnyMorganz/stylua-action@v3
+        with:
+          version: latest
+
+      - name: Install Selene
+        uses: NTBBloodbath/selene-action@v1.0.0
+        with:
+          version: latest
+
+      - name: Clone Plenary
+        run: git clone --depth=1 https://github.com/nvim-lua/plenary.nvim /tmp/plenary.nvim
+
+      - name: Run Plenary tests
+        run: |
+          nvim --headless --clean -u NONE \
+            --cmd "set rtp+=/tmp/plenary.nvim" \
+            --cmd "set rtp+=." \
+            --cmd "runtime plugin/plenary.vim" \
+            -c "PlenaryBustedDirectory tests/ {minimal_init = 'tests/minimal_init.lua'}" \
+            -c "qa!" 2>&1 | tee plenary.log
+
+          if grep -Eq 'Failed : [1-9]|Errors : [1-9]' plenary.log; then
+            exit 1
+          fi
+
+      - name: Stylua check
+        run: stylua --check .
+
+      - name: Selene
+        run: selene .

@@ -1,0 +1,13 @@
+{
+  "jsonrpc": "2.0",
+  "id": 10,
+  "result": {
+    "file_count": 2,
+    "symbol_count": 5,
+    "symbols": [
+      { "name": "MainKt", "kind": "file" },
+      { "name": "main", "kind": "function" },
+      { "name": "greet", "kind": "function" }
+    ]
+  }
+}

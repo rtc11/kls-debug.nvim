@@ -1,0 +1,14 @@
+{
+  "jsonrpc": "2.0",
+  "id": 5,
+  "result": {
+    "contents": {
+      "kind": "markdown",
+      "value": "```kotlin\nfun greet(name: String): String\n```"
+    },
+    "range": {
+      "start": { "line": 2, "character": 4 },
+      "end": { "line": 2, "character": 9 }
+    }
+  }
+}

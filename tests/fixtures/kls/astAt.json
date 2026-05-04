@@ -1,0 +1,18 @@
+{
+  "jsonrpc": "2.0",
+  "id": 8,
+  "result": {
+    "kind": "FILE",
+    "name": "Main.kt",
+    "children": [
+      {
+        "kind": "PACKAGE_DECL",
+        "name": "sample"
+      },
+      {
+        "kind": "FUN_DECL",
+        "name": "main"
+      }
+    ]
+  }
+}

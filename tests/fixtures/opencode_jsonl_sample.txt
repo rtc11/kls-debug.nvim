@@ -1,0 +1,4 @@
+{"type":"step_start"}
+{"type":"text","part":{"text":"hello "}}
+{"type":"text","part":{"text":"world"}}
+{"type":"step_finish"}

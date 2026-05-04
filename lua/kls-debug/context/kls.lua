@@ -75,12 +75,8 @@ local function uri_for_bufnr(bufnr)
 	if type(name) ~= "string" or name == "" then
 		return nil
 	end
-	local ok_name, name = pcall(vim.api.nvim_buf_get_name, bufnr)
-	if not ok_name or type(name) ~= "string" or name == "" then
-		return nil
-	end
 	local ok, uri = pcall(vim.uri_from_bufnr, bufnr)
-	if not ok or type(uri) ~= "string" or uri == "" then
+	if not ok or type(uri) ~= "string" or uri == "" or uri == "file://" then
 		return nil
 	end
 	return uri

@@ -51,13 +51,12 @@ local function find_up(start_path, marker)
 		return nil
 	end
 	local dir = start_path
-	local stat = uv.fs_stat(dir)
-	if stat and stat.type == "file" then
+	if vim.fn.isdirectory(dir) ~= 1 then
 		dir = vim.fn.fnamemodify(dir, ":h")
 	end
 	while dir and dir ~= "" and dir ~= "/" do
 		local candidate = dir .. "/" .. marker
-		if uv.fs_stat(candidate) then
+		if vim.fn.filereadable(candidate) == 1 then
 			return dir
 		end
 		local parent = vim.fn.fnamemodify(dir, ":h")
@@ -106,18 +105,12 @@ function M.read_port(workspace_root)
 		return nil
 	end
 	local port_file = workspace_root .. "/" .. PORT_FILE_NAME
-	local fd = uv.fs_open(port_file, "r", 438)
-	if not fd then
+	if vim.fn.filereadable(port_file) ~= 1 then
 		return nil
 	end
-	local stat = uv.fs_fstat(fd)
-	if not stat then
-		pcall(uv.fs_close, fd)
-		return nil
-	end
-	local data = uv.fs_read(fd, stat.size, 0)
-	pcall(uv.fs_close, fd)
-	if not data then
+	local lines = vim.fn.readfile(port_file)
+	local data = lines[1]
+	if type(data) ~= "string" then
 		return nil
 	end
 	local trimmed = data:match("^%s*(.-)%s*$")

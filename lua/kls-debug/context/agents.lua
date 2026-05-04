@@ -1,25 +1,17 @@
 local M = {}
 
-local uv = vim.uv or vim.loop
-
 local MAX_BYTES = 50 * 1024
 
 local function read_head(path, cap)
-	local fd = uv.fs_open(path, "r", 438)
-	if not fd then
+	if vim.fn.filereadable(path) ~= 1 then
 		return nil, "not found"
 	end
 
-	local stat = uv.fs_fstat(fd)
-	if not stat then
-		uv.fs_close(fd)
-		return nil, "not found"
+	local lines = vim.fn.readfile(path)
+	local data = table.concat(lines, "\n")
+	if #data > cap then
+		data = data:sub(1, cap)
 	end
-
-	local size = stat.size or 0
-	local to_read = math.min(size, cap)
-	local data = uv.fs_read(fd, to_read, 0) or ""
-	uv.fs_close(fd)
 	return data, nil
 end
 

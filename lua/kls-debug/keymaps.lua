@@ -26,12 +26,23 @@ function M.setup(cfg)
 	local normal_lhs = cfg.keymaps.normal_diag
 
 	vim.keymap.set("v", visual_lhs, function()
+		local cursor_line = vim.fn.line(".")
+		local anchor_line = vim.fn.line("v")
+		local line1 = math.min(cursor_line, anchor_line)
+		local line2 = math.max(cursor_line, anchor_line)
+
+		vim.cmd("normal! \27")
+
 		vim.ui.input({ prompt = "KlsDebugAsk: " }, function(input)
 			if input == nil then
 				return
 			end
 
-			vim.cmd("'<,'>KlsDebugAsk " .. input)
+			vim.api.nvim_cmd({
+				cmd = "KlsDebugAsk",
+				range = { line1, line2 },
+				args = { input },
+			}, {})
 		end)
 	end, { desc = "KlsDebugAsk selection", silent = true })
 

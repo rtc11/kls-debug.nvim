@@ -22,16 +22,19 @@ jobs:
           neovim: true
           version: ${{ matrix.nvim_version }}
 
-      - name: Install Stylua
+      - name: Stylua check
         uses: JohnnyMorganz/stylua-action@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           version: latest
+          args: --check .
 
       - name: Install Selene
         uses: NTBBloodbath/selene-action@v1.0.0
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           version: latest
+          args: --display-style=quiet .
 
       - name: Clone Plenary
         run: git clone --depth=1 https://github.com/nvim-lua/plenary.nvim /tmp/plenary.nvim
@@ -48,9 +51,3 @@ jobs:
           if grep -Eq 'Failed : [1-9]|Errors : [1-9]' plenary.log; then
             exit 1
           fi
-
-      - name: Stylua check
-        run: stylua --check .
-
-      - name: Selene
-        run: selene .
